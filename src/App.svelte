@@ -10,4 +10,8 @@
   let products = [];
   let selectedProduct = null;
   let showModal = false;
+
+  const fetchProducts = async () => {
+
+  };
 </script>
