@@ -25,19 +25,20 @@
 
 <style>
   .product-detail {
+    max-width: 250px;
+    margin: 0 auto;
+    text-align: center;
+    font-weight: bold;
     padding: 1.5rem;
-    max-width: 800px;
-    margin: 2rem auto;
     background-color: #f9f9f9;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
-  .product-image {
-    width: 100%;
-    max-width: 500px;
+  .product-detail img {
+    max-width: 100%;
     height: auto;
-    object-fit: contain;
-    border-radius: 8px;
+    border-radius: 2px;
+    font-size: large;
     margin-bottom: 1rem;
   }
   h1 {
@@ -58,11 +59,15 @@
 
 {#if product}
   <div class="product-detail">
-    <img src={product.image} alt={product.title} class="product-image" />
+    <img src={product.image} alt={product.title} />
     <h1>{product.title}</h1>
     <p class="price">${product.price}</p>
     <p>Category: {product.category}</p>
-    <p>Ratings: {product.rating.rate} (Based on {product.rating.count} reviews)</p>
+    {#if product.rating}
+      <p>Ratings: {product.rating.rate} (Based on {product.rating.count} reviews)</p>
+    {:else}
+      <p>Ratings: Not available</p>
+    {/if}
     <p>{product.description}</p>
   </div>
 {:else}
