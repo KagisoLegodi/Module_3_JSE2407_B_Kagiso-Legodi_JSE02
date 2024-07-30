@@ -42,7 +42,6 @@
 <Router>
   <Header />
   <div class="container">
-    <h1>Welcome to the Svelte E-store!</h1>
     <Route path="/" let:params>
       <ProductList {products} on:select={openModal} />
     </Route>

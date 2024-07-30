@@ -1,7 +1,4 @@
 <script>
-// @ts-nocheck
-
-    // @ts-ignore
     import { Link } from 'svelte-routing';
   
     export let products = [];
@@ -15,17 +12,21 @@
       categories = await res.json();
     };
   
-    const handleCategoryChange = (/** @type {{ target: { value: string; }; }} */ event) => {
+    const handleCategoryChange = (event) => {
       selectedCategory = event.target.value;
     };
   
-    const handleSortChange = (/** @type {{ target: { value: string; }; }} */ event) => {
+    const handleSortChange = (event) => {
       sortOrder = event.target.value;
     };
   
     $: filteredProducts = products
       .filter(product => selectedCategory ? product.category === selectedCategory : true)
-      .sort((a, b) => sortOrder === 'low-to-high' ? a.price - b.price : sortOrder === 'high-to-low' ? b.price - a.price : 0);
+      .sort((a, b) => {
+        if (sortOrder === 'low-to-high') return a.price - b.price;
+        if (sortOrder === 'high-to-low') return b.price - a.price;
+        return 0;
+      });
   
     fetchCategories();
   </script>
@@ -61,7 +62,7 @@
   
   <div class="product-list">
     {#each filteredProducts as product}
-      <Link to="/product/{product.id}">
+      <Link to={`/product/${product.id}`}>
         <div class="product-card">
           <img src={product.image} alt={product.title} class="w-40 max-w-[300px] h-auto object-contain rounded-lg" />
           <h2>{product.title}</h2>
