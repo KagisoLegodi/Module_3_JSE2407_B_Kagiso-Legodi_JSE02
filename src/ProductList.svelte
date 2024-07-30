@@ -8,40 +8,17 @@
     let categories = [];
     let selectedCategory = '';
     let sortOrder = '';
-    let loading = true; // Initialize loading state
     
     const fetchCategories = async () => {
-      try {
-        const res = await fetch('https://fakestoreapi.com/products/categories');
-        if (res.ok) {
-          categories = await res.json();
-        } else {
-          console.error('Failed to fetch categories');
-        }
-      } catch (error) {
-        console.error('Error fetching categories:', error);
-      }
+      const res = await fetch('https://fakestoreapi.com/products/categories');
+      categories = await res.json();
     };
     
-    const fetchProducts = async () => {
-      try {
-        const res = await fetch('https://fakestoreapi.com/products');
-        if (res.ok) {
-          products = await res.json();
-          loading = false; // Set loading to false once data is fetched
-        } else {
-          console.error('Failed to fetch products');
-        }
-      } catch (error) {
-        console.error('Error fetching products:', error);
-      }
-    };
-    
-    const handleCategoryChange = (event) => {
+    const handleCategoryChange = (/** @type {{ target: { value: string; }; }} */ event) => {
       selectedCategory = event.target.value;
     };
     
-    const handleSortChange = (event) => {
+    const handleSortChange = (/** @type {{ target: { value: string; }; }} */ event) => {
       sortOrder = event.target.value;
     };
     
@@ -49,37 +26,25 @@
       .filter(product => selectedCategory ? product.category === selectedCategory : true)
       .sort((a, b) => sortOrder === 'low-to-high' ? a.price - b.price : sortOrder === 'high-to-low' ? b.price - a.price : 0);
     
-    onMount(() => {
-      fetchCategories();
-      fetchProducts();
-    });
-  </script>
-  
-  <style>
-    .product-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1rem;
-    }
-    .product-card {
-      border: 1px solid #090808;
-      padding: 1rem;
-      border-radius: 8px;
-      cursor: pointer;
-      width: 200px;
-      background-color: white;
-    }
-    .loading {
-      text-align: center;
-      padding: 2rem;
-      font-size: 1.5rem;
-      color: #888;
-    }
-  </style>
-  
-  {#if loading}
-    <div class="loading">Loading products...</div>
-  {:else}
+    fetchCategories();
+    </script>
+    
+    <style>
+       .product-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+      .product-card {
+        border: 1px solid #090808;
+        padding: 1rem;
+        border-radius: 8px;
+        cursor: pointer;
+        width: 200px;
+        background-color: white;
+      }
+    </style>
+    
     <select on:change={handleCategoryChange}>
       <option value=''>All Categories</option>
       {#each categories as category}
@@ -107,5 +72,4 @@
         </Link>
       {/each}
     </div>
-  {/if}
-  
+    

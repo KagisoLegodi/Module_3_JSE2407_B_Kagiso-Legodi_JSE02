@@ -26,7 +26,7 @@
 
 <style>
   .product-detail {
-    max-width: 250px;
+    max-width: 100%; /* Ensures the container can use the full width of the screen */
     margin: 0 auto;
     text-align: center;
     font-weight: bold;
@@ -39,11 +39,7 @@
     align-items: center;
   }
   .product-detail img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 2px;
-    font-size: large;
-    margin-bottom: 1rem;
+    max-width: 30%; /* Adjust the max-width to ensure the image fits within the container */
   }
   h1 {
     font-size: 2rem;
@@ -59,16 +55,14 @@
     font-weight: bold;
     color: #1a202c;
   }
-  .back-button {
-    margin-top: 1rem;
-    padding: 0.5rem 1rem;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    text-decoration: none;
+   
+
+  /* Responsive adjustments for smaller screens */
+@media (max-width: 600px) {
+  .product-detail {
+    width: 100%;
   }
+}
 </style>
 
 {#if product}
