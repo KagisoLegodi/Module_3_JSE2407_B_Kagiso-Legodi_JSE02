@@ -1,47 +1,150 @@
-# Svelte + Vite
+# Svelte E-store
 
-This template should help get you started developing with Svelte in Vite.
+## Introduction
 
-## Recommended IDE Setup
+Welcome to the Alpine E-store! This project is a web application designed to showcase products in a user-friendly manner. It features a detailed view modal to display comprehensive product information, including images, ratings, descriptions, and options to add items to the cart(not yet functional).
 
-[VS Code](https://code.visualstudio.com/) + [Svelte](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode).
+## Technologies Used
 
-## Need an official Svelte framework?
+- **HTML/CSS**: For structuring and styling the components.
+- **Svelte.js**: For handling state and interactivity in a lightweight manner.
+- **Tailwind CSS**: For utility-first CSS styling.
+- **JavaScript**: For additional functionality and dynamic content handling.
 
-Check out [SvelteKit](https://github.com/sveltejs/kit#readme), which is also powered by Vite. Deploy anywhere with its serverless-first approach and adapt to various platforms, with out of the box support for TypeScript, SCSS, and Less, and easily-added support for mdsvex, GraphQL, PostCSS, Tailwind CSS, and more.
+## Setup Instructions
 
-## Technical considerations
+To get started with this project, follow these steps:
 
-**Why use this over SvelteKit?**
+1. **Clone the Repository**
 
-- It brings its own routing solution which might not be preferable for some users.
-- It is first and foremost a framework that just happens to use Vite under the hood, not a Vite app.
+   git clone <https://github.com/KagisoLegodi/Module_2_KAGLEG394_JSE2407-B_KagisoLegodi_JSF01.git>
 
-This template contains as little as possible to get started with Vite + Svelte, while taking into account the developer experience with regards to HMR and intellisense. It demonstrates capabilities on par with the other `create-vite` templates and is a good starting point for beginners dipping their toes into a Vite + Svelte project.
+2. **Navigate to the Project Directory**
 
-Should you later need the extended capabilities and extensibility provided by SvelteKit, the template has been structured similarly to SvelteKit so that it is easy to migrate.
+   bash
+   cd alpine-final
 
-**Why `global.d.ts` instead of `compilerOptions.types` inside `jsconfig.json` or `tsconfig.json`?**
+3. **Install Dependencies**
 
-Setting `compilerOptions.types` shuts out all other types not explicitly listed in the configuration. Using triple-slash references keeps the default TypeScript setting of accepting type information from the entire workspace, while also adding `svelte` and `vite/client` type information.
+   Ensure you have Node.js and npm installed, then run:
 
-**Why include `.vscode/extensions.json`?**
+   bash
+   npm install
 
-Other templates indirectly recommend extensions via the README, but this file allows VS Code to prompt the user to install the recommended extension upon opening the project.
+4. **Run the Development Server**
 
-**Why enable `checkJs` in the JS template?**
+   Start the development server to view the application locally:
 
-It is likely that most cases of changing variable types in runtime are likely to be accidental, rather than deliberate. This provides advanced typechecking out of the box. Should you like to take advantage of the dynamically-typed nature of JavaScript, it is trivial to change the configuration.
+   bash
+   npm start
 
-**Why is HMR not preserving my local component state?**
+   Open your browser and navigate to `http://localhost:3000` to see the application in action.
 
-HMR state preservation comes with a number of gotchas! It has been disabled by default in both `svelte-hmr` and `@sveltejs/vite-plugin-svelte` due to its often surprising behavior. You can read the details [here](https://github.com/sveltejs/svelte-hmr/tree/master/packages/svelte-hmr#preservation-of-local-state).
+## Usage Examples
 
-If you have state that's important to retain within a component, consider creating an external store which would not be replaced by HMR.
+### Detailed View Page
 
-```js
-// store.js
-// An extremely simple external store
-import { writable } from 'svelte/store'
-export default writable(0)
-```
+The detailed view modal component displays detailed information about a selected product. It features:
+
+- **Product Image**: Displayed on the left side of the modal.
+- **Product Title**: Shown prominently at the top.
+- **Rating**: Includes a star rating and the number of reviews, if available.
+- **Description**: A brief overview of the product.
+- **Action Buttons**: Go back to home page.
+
+Here's the Svelte.js structure for the : Details page
+
+<script>
+  import { onMount } from 'svelte';
+  import { Link } from 'svelte-routing';
+
+  export let params = {}; // Route parameters passed from the parent component
+  let product = null;
+  let productId = params.id || ''; // Extract productId from params
+
+  const fetchProduct = async () => {
+    try {
+      const res = await fetch(`https://fakestoreapi.com/products/${productId}`);
+      if (res.ok) {
+        product = await res.json();
+      } else {
+        console.error('Failed to fetch product');
+      }
+    } catch (error) {
+      console.error('Error fetching product:', error);
+    }
+  };
+
+  onMount(() => {
+    fetchProduct();
+  });
+</script>
+
+<style>
+  .product-detail {
+    max-width: 100%; /* Ensures the container can use the full width of the screen */
+    margin: 0 auto;
+    text-align: center;
+    font-weight: bold;
+    padding: 1.5rem;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .product-detail img {
+    max-width: 30%; /* Adjust the max-width to ensure the image fits within the container */
+  }
+  h1 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    color: #333;
+  }
+  p {
+    font-size: 1rem;
+    margin: 0.5rem 0;
+    color: #555;
+  }
+  .price {
+    font-weight: bold;
+    color: #1a202c;
+  }
+   
+
+  /* Responsive adjustments for smaller screens */
+@media (max-width: 600px) {
+  .product-detail {
+    width: 100%;
+  }
+}
+</style>
+
+{#if product}
+  <div class="product-detail">
+    <img src={product.image} alt={product.title} class="product-image" />
+    <h1>{product.title}</h1>
+    <p class="price">${product.price}</p>
+    <p>Category: {product.category}</p>
+    <p>Ratings: {product.rating.rate} (Based on {product.rating.count} reviews)</p>
+    <p>{product.description}</p>
+    <Link to="/" class="back-button">Back to Products</Link>
+  </div>
+{:else}
+  <p>Loading...</p>
+{/if}
+
+## Contributing
+
+We welcome contributions to improve the project. Please follow these guidelines:
+
+1. **Fork the Repository**
+2. **Create a Feature Branch**
+3. **Commit Your Changes**
+4. **Push to the Branch**
+5. **Create a Pull Request**
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
