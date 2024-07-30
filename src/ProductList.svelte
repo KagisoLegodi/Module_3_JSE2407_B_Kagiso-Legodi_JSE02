@@ -69,7 +69,7 @@
           <img src={product.image} alt={product.title} class="w-40 max-w-[300px] h-auto object-contain rounded-lg" />
           <h2>{product.title}</h2>
           <p>${product.price}</p>
-          <p>Category: {product.category}</p>
+          <p>{product.category}</p>
           <p>Ratings: {product.rating.rate}</p>
           <p>Reviews: {product.rating.count}</p>
         </div>
