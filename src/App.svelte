@@ -1,18 +1,34 @@
 <script>
   import { onMount } from 'svelte';
-  import { Router, Route } from 'svelte-routing';
+  // @ts-ignore
+  import { Router } from 'svelte-routing';
   import ProductList from './ProductList.svelte';
-  import ProductDetail from './ProductDetail.svelte';
-  import Header from './Header.svelte';
+  import ProductDetailModal from './ProductDetail.svelte';
   import "./app.css";
+  import Header from "./Header.svelte";
 
   let products = [];
-  let loading = true;
+  let selectedProduct = null;
+  let showModal = false;
 
   const fetchProducts = async () => {
     const res = await fetch('https://fakestoreapi.com/products');
-    products = await res.json();
-    loading = false;
+    const data = await res.json();
+    products = data;
+  };
+
+  /**
+   * @param {CustomEvent<{ id: number, title: string, price: number, description: string, category: string, image: string, rating: { rate: number, count: number } }>} event
+   */
+  const openModal = (event) => {
+    const product = event.detail;
+    selectedProduct = product;
+    showModal = true;
+  };
+
+  const closeModal = () => {
+    selectedProduct = null;
+    showModal = false;
   };
 
   onMount(fetchProducts);
@@ -24,18 +40,11 @@
   }
 </style>
 
-<Header />
 <Router>
+  <Header />
   <div class="container">
-    {#if loading}
-      <p>Loading...</p>
-    {:else}
-      <Route path="/">
-        <ProductList {products} />
-      </Route>
-      <Route path="product/:id" let:params>
-        <ProductDetail id={params.id} />
-      </Route>
-    {/if}
+    <h1>Welcome to the Svelte E-store!</h1>
+    <ProductList {products} on:select={openModal} />
+
   </div>
 </Router>
