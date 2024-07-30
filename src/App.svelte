@@ -34,3 +34,9 @@
   onMount(fetchProducts);
 
 </script>
+
+<style>
+  .container {
+    padding: 2rem;
+  }
+</style>
