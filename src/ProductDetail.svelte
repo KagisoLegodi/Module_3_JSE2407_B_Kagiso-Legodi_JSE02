@@ -1,5 +1,6 @@
 <script>
   import { onMount } from 'svelte';
+  import { Link } from 'svelte-routing';
 
   export let params = {}; // Route parameters passed from the parent component
   let product = null;
@@ -33,6 +34,9 @@
     background-color: #f9f9f9;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
   .product-detail img {
     max-width: 100%;
@@ -55,20 +59,27 @@
     font-weight: bold;
     color: #1a202c;
   }
+  .back-button {
+    margin-top: 1rem;
+    padding: 0.5rem 1rem;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+  }
 </style>
 
 {#if product}
   <div class="product-detail">
-    <img src={product.image} alt={product.title} />
+    <img src={product.image} alt={product.title} class="product-image" />
     <h1>{product.title}</h1>
     <p class="price">${product.price}</p>
     <p>Category: {product.category}</p>
-    {#if product.rating}
-      <p>Ratings: {product.rating.rate} (Based on {product.rating.count} reviews)</p>
-    {:else}
-      <p>Ratings: Not available</p>
-    {/if}
+    <p>Ratings: {product.rating.rate} (Based on {product.rating.count} reviews)</p>
     <p>{product.description}</p>
+    <Link to="/" class="back-button">Back to Products</Link>
   </div>
 {:else}
   <p>Loading...</p>
