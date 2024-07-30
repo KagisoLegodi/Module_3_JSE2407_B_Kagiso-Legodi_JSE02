@@ -1,9 +1,8 @@
 <script>
   import { onMount } from 'svelte';
-  // @ts-ignore
-  import { Router } from 'svelte-routing';
+  import { Router, Route } from 'svelte-routing'; // Updated to import Route
   import ProductList from './ProductList.svelte';
-  import ProductDetailModal from './ProductDetail.svelte';
+  import ProductDetail from './ProductDetail.svelte'; // Renamed to ProductDetail to match the new component name
   import "./app.css";
   import Header from "./Header.svelte";
 
@@ -44,7 +43,11 @@
   <Header />
   <div class="container">
     <h1>Welcome to the Svelte E-store!</h1>
-    <ProductList {products} on:select={openModal} />
-
+    <Route path="/" let:params>
+      <ProductList {products} on:select={openModal} />
+    </Route>
+    <Route path="/product/:id" let:params>
+      <ProductDetail />
+    </Route>
   </div>
 </Router>

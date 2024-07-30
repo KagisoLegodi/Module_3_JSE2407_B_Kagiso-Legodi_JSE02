@@ -1,4 +1,6 @@
 <script>
+// @ts-nocheck
+
     // @ts-ignore
     import { Link } from 'svelte-routing';
   
@@ -13,11 +15,11 @@
       categories = await res.json();
     };
   
-    const handleCategoryChange = (event) => {
+    const handleCategoryChange = (/** @type {{ target: { value: string; }; }} */ event) => {
       selectedCategory = event.target.value;
     };
   
-    const handleSortChange = (event) => {
+    const handleSortChange = (/** @type {{ target: { value: string; }; }} */ event) => {
       sortOrder = event.target.value;
     };
   
@@ -65,7 +67,7 @@
           <h2>{product.title}</h2>
           <p>${product.price}</p>
           <p>Category: {product.category}</p>
-          <p>Rating: {product.rating.rate}</p>
+          <p>Ratings: {product.rating.rate}</p>
           <p>Reviews: {product.rating.count}</p>
         </div>
       </Link>

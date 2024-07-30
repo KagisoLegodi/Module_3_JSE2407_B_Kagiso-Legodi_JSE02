@@ -1,53 +1,70 @@
 <script>
-    import { createEventDispatcher } from 'svelte';
-    const dispatch = createEventDispatcher();
-  
-    export let selectedProduct;
-  
-    const closeModal = () => {
-      dispatch('close');
-    };
-  </script>
-  
-  <style>
-    .modal {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.5);
-      display: flex;
-      align-items: center;
-      justify-content: center;
+  import { onMount } from 'svelte';
+
+  export let params = {}; // Route parameters passed from the parent component
+  let product = null;
+  let productId = params.id || ''; // Extract productId from params
+
+  const fetchProduct = async () => {
+    try {
+      const res = await fetch(`https://fakestoreapi.com/products/${productId}`);
+      if (res.ok) {
+        product = await res.json();
+      } else {
+        console.error('Failed to fetch product');
+      }
+    } catch (error) {
+      console.error('Error fetching product:', error);
     }
-    .modal-content {
-      background: white;
-      padding: 2rem;
-      border-radius: 8px;
-      width: 300px;
-    }
-    .close-btn {
-      position: absolute;
-      top: 1rem;
-      right: 1rem;
-      cursor: pointer;
-    }
-  </style>
-  
-  <!-- svelte-ignore a11y-no-static-element-interactions -->
-  <!-- svelte-ignore a11y-click-events-have-key-events -->
-  <div class="modal" on:click={closeModal}>
-    <div class="modal-content" on:click|stopPropagation>
-      <!-- svelte-ignore a11y-click-events-have-key-events -->
-      <!-- svelte-ignore a11y-no-static-element-interactions -->
-      <span class="close-btn" on:click={closeModal}>&times;</span>
-      <img src={selectedProduct.image} alt={selectedProduct.title} width="100%" />
-      <h2>{selectedProduct.title}</h2>
-      <p>{selectedProduct.description}</p>
-      <p>Rating: {selectedProduct.rating.rate} ({selectedProduct.rating.count} reviews)</p>
-      <p>${selectedProduct.price}</p>
-      <button on:click={() => alert('Add to cart functionality not yet implemented')}>Add to Cart</button>
-    </div>
+  };
+
+  onMount(() => {
+    fetchProduct();
+  });
+</script>
+
+<style>
+  .product-detail {
+    padding: 1.5rem;
+    max-width: 800px;
+    margin: 2rem auto;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  .product-image {
+    width: 100%;
+    max-width: 500px;
+    height: auto;
+    object-fit: contain;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+  }
+  h1 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    color: #333;
+  }
+  p {
+    font-size: 1rem;
+    margin: 0.5rem 0;
+    color: #555;
+  }
+  .price {
+    font-weight: bold;
+    color: #1a202c;
+  }
+</style>
+
+{#if product}
+  <div class="product-detail">
+    <img src={product.image} alt={product.title} class="product-image" />
+    <h1>{product.title}</h1>
+    <p class="price">${product.price}</p>
+    <p>Category: {product.category}</p>
+    <p>Ratings: {product.rating.rate} (Based on {product.rating.count} reviews)</p>
+    <p>{product.description}</p>
   </div>
-  
+{:else}
+  <p>Loading...</p>
+{/if}
