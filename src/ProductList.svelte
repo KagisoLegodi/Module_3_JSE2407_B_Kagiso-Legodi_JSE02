@@ -61,10 +61,12 @@
     {#each filteredProducts as product}
       <Link to="/product/{product.id}">
         <div class="product-card">
-          <img src={product.image} alt={product.title} width="100" height="100" />
+          <img src={product.image} alt={product.title} class="w-40 max-w-[300px] h-auto object-contain rounded-lg" />
           <h2>{product.title}</h2>
           <p>${product.price}</p>
           <p>Category: {product.category}</p>
+          <p>Rating: {product.rating.rate}</p>
+          <p>Reviews: {product.rating.count}</p>
         </div>
       </Link>
     {/each}
