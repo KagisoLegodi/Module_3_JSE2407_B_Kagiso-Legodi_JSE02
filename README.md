@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Welcome to the Alpine E-store! This project is a web application designed to showcase products in a user-friendly manner. It features a detailed view modal to display comprehensive product information, including images, ratings, descriptions, and options to add items to the cart(not yet functional).
+Welcome to the Svelte E-store! This project is a web application designed to showcase products in a user-friendly manner. It features a detailed view modal to display comprehensive product information, including images, ratings, descriptions, and options to add items to the cart(not yet functional).
 
 ## Technologies Used
 
